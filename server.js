@@ -34,9 +34,11 @@ io.sockets.on('connection', function (socket) {
 		socket.nickname = data.nickname;
 		socket.emit('ready');
 		var users = [];
-		for (var soc in io.sockets.clients()) {
-        	users.push({nickname: soc.nickname});
+		var clients = io.sockets.clients();
+		for (var i in clients) {
+        	users.push({nickname: clients[i].nickname});
 		}
+		console.log(users);
 		io.sockets.emit('user_list', {users: users});
 		socket.broadcast.emit('new_user', {
 		    nickname: data.nickname  
@@ -52,9 +54,10 @@ io.sockets.on('connection', function (socket) {
 	socket.on('disconnect', function () {
 		if (socket.nickname) {
 			var users = [];
-			for (var soc in io.sockets.clients()) {
+			var clients = io.sockets.clients();
+			for (var i in clients) {
 				if (soc != socket) {
-	        		users.push({nickname: soc.nickname});
+	        		users.push({nickname: clients[i].nickname});
 	        	}
 			}
 			io.sockets.emit('user_list', {users: users});
