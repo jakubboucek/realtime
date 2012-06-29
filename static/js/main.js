@@ -95,6 +95,13 @@ $(function(){
 		}
 	});
 
+	socket.on('user_waiting_messages', function (data) {
+		console.log('users_list');
+		var messages = data.messages;
+
+		console.log(messages);
+	});
+
 });
 
 function str2date(str) {
