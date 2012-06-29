@@ -26,10 +26,10 @@ $(function(){
 
 	socket.on('lost_user', function (data) {
 		console.log('lost_user');
-		$('#log').prepend("<div class=\"system\">User " + data.nickname + " leave the room :-(</div>");
+		$('#log').prepend("<div class=\"system\">User " + /*data.nickname +*/ " leave the room :-(</div>");
 	});
 
-	$('#login_message').click(function(){
+	$('#message_submit').click(function(){
 		var message = $('#message');
 		socket.emit('put_message', { message: message.val() });
 		message.val('');
