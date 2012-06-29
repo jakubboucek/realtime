@@ -42,7 +42,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('put_message', function (data) {
 		data.nickname = socket.get('nickname');
 		data.createdTime = new Date.getTime();
-		socket.broadcast.emit('new_message', data)
+		socket.broadcast.emit('new_message', data);
 	});
 
 	socket.on('disconnect', function () {
