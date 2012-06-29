@@ -15,8 +15,27 @@ header, #page, footer {
 #log {
 	height: 400px;
 	background-color: white;
-	padding: 2em;
+	padding: 1em;
 	margin-top: 1em;
+	overflow-y: auto;
+	width: 75%;
+	float:left;
+}
+
+#userlist {
+	width: 20%;
+	float: right;
+	margin-top: 1em;
+	font-size: 0.8em;
+}
+
+#userlist ul {
+	list-style: none;
+	padding-left: 0;
+}
+
+#userlist ul img {
+	vertical-align: middle;
 }
 
 #log .system {
@@ -36,4 +55,11 @@ footer {
 	margin-top: 2em;
 	color: #888;
 	text-align: center;
+}
+.cleaner {
+	clear: both;
+	font-size: 1px;
+	height: 0;
+	visibility: hidden;
+	overflow: hidden;
 }
