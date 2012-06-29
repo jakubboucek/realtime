@@ -39,16 +39,15 @@ io.sockets.on('connection', function (socket) {
 		});  
 	});
 
-	socket.on('msg', function (data) {
+	socket.on('put_message', function (data) {
 		data.nickname = socket.get('nickname');
 		data.createdTime = new Date.getTime();
-		socket.broadcast.emit('new_msg', data)
+		socket.broadcast.emit('new_message', data)
 	});
 
 	socket.on('disconnect', function () {
-		socket.broadcast.emit('lost_user', {
-	    	nickname: socket.get('nickname')
-	    });
-	});
+		console.log(arguments);
+    	io.sockets.emit('lost_user');
+  	});
 });
 
