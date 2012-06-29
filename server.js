@@ -33,6 +33,11 @@ io.sockets.on('connection', function (socket) {
 	socket.on('login', function (data) {
 		socket.nickname = data.nickname;
 		socket.emit('ready');
+		var users = [];
+		for (var soc in io.sockets.clients()) {
+        	users.push({nickname: soc.nickname});
+		}
+		io.sockets.emit('user_list', {users: users});
 		socket.broadcast.emit('new_user', {
 		    nickname: data.nickname  
 		});  
@@ -46,6 +51,13 @@ io.sockets.on('connection', function (socket) {
 
 	socket.on('disconnect', function () {
 		if (socket.nickname) {
+			var users = [];
+			for (var soc in io.sockets.clients()) {
+				if (soc != socket) {
+	        		users.push({nickname: soc.nickname});
+	        	}
+			}
+			io.sockets.emit('user_list', {users: users});
     		io.sockets.emit('lost_user', {nickname: socket.nickname});
     	}
   	});
