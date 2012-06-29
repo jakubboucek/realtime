@@ -45,7 +45,7 @@ io.sockets.on('connection', function (socket) {
 		socket.broadcast.emit('new_msg', data)
 	});
 
-	sockets.on('disconnect', function (socket) {
+	socket.on('disconnect', function (socket) {
 		socket.broadcast.emit('lost_user', {
 	    	nickname: socket.get('nickname')
 	    });
