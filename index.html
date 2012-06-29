@@ -1,15 +1,65 @@
-<html>
-<head>
-	<script src="/socket.io/socket.io.js"></script>
-	<script>
-	  var socket = io.connect('/');
-	  socket.on('init', function (data) {
-	    console.log('init');
-	    socket.emit('login', { nickname: 'bukaj' });
-	  });
-	</script>
-</head>
-<body>
-    <input type="text" name="">
+<!doctype html>
+<meta charset="utf-8">
+<title>Realtime</title>
+<link href="/static/css/main.css" rel="stylesheet" type="text/css" media="screen" />
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>
+	$(function(){
+		var socket = io.connect('/');
+		socket.on('init', function (data) {
+			console.log('init');
+			$('#login').focus();
+		});
 
-</body>
+		$('#login_submit').click(function(){
+			socket.emit('login', { nickname: $('#login').val() });
+		});
+
+		socket.on('ready', function (data) {
+			console.log('ready');
+
+			$('#login').attr('disabled', true);
+			$('#messagebox').show();
+			$('#message').focus();
+			$('#log').text("");
+		});
+
+		socket.on('new_user', function (data) {
+			console.log('new_user');
+			$('#log').prepend("<div class=\"system\">User " + data.nickname + " is now connected :-)</div>");
+		});
+		
+		socket.on('lost_user', function (data) {
+			console.log('lost_user');
+			$('#log').prepend("<div class=\"system\">User " + data.nickname + " leave the room :-(</div>");
+		});
+
+		$('#login_message').click(function(){
+			socket.emit('put_message', { message: $('#message').val() });
+		});
+
+	});
+
+
+
+</script>
+
+
+<header>
+<h1>Realtime</h1>
+</header>
+
+<section id="page">
+	<label for="login">Insert nickname and press Enter</label>
+	<input type="text" id="login" value="" size="50" placeholder="Insert nickname and press Enter"/> <button id="login_submit">Submit</button>
+	<div id="messagebox">
+		<label for="message">Insert message and press Enter</label>
+		<input type="text" id="message" size="50" placeholder="Insert message and press Enter"  /> <button id="message_submit">Submit</button>
+		<div id="log">loading...</div>
+	</div>
+</section>
+
+<footer>
+	Realtime team
+</footer>
