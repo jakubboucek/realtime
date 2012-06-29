@@ -4,47 +4,7 @@
 <link href="/static/css/main.css" rel="stylesheet" type="text/css" media="screen" />
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script>
-	$(function(){
-		var socket = io.connect('/');
-		socket.on('init', function (data) {
-			console.log('init');
-			$('#login').focus();
-		});
-
-		$('#login_submit').click(function(){
-			socket.emit('login', { nickname: $('#login').val() });
-		});
-
-		socket.on('ready', function (data) {
-			console.log('ready');
-
-			$('#login').attr('disabled', true);
-			$('#messagebox').show();
-			$('#message').focus();
-			$('#log').text("");
-		});
-
-		socket.on('new_user', function (data) {
-			console.log('new_user');
-			$('#log').prepend("<div class=\"system\">User " + data.nickname + " is now connected :-)</div>");
-		});
-		
-		socket.on('lost_user', function (data) {
-			console.log('lost_user');
-			$('#log').prepend("<div class=\"system\">User " + data.nickname + " leave the room :-(</div>");
-		});
-
-		$('#login_message').click(function(){
-			socket.emit('put_message', { message: $('#message').val() });
-		});
-
-	});
-
-
-
-</script>
-
+<script src="/static/js/main.js"></script>
 
 <header>
 <h1>Realtime</h1>
