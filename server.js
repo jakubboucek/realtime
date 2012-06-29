@@ -44,10 +44,11 @@ io.sockets.on('connection', function (socket) {
 		data.createdTime = new Date.getTime();
 		socket.broadcast.emit('new_msg', data)
 	});
-});
 
-io.sockets.on('disconnect', function (socket) {
-	socket.broadcast.emit('lost_user', {
-    	nickname: socket.get('nickname')
+	sockets.on('disconnect', function (socket) {
+		socket.broadcast.emit('lost_user', {
+	    	nickname: socket.get('nickname')
+	    });
 	});
 });
+
