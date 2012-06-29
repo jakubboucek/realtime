@@ -26,7 +26,7 @@ $(function(){
 
 	socket.on('lost_user', function (data) {
 		console.log('lost_user');
-		$('#log').prepend("<div class=\"system\">User " + /*data.nickname +*/ " leave the room :-(</div>");
+		$('#log').prepend("<div class=\"system\">Some user " + /*data.nickname +*/ " leave the room :-(</div>");
 	});
 
 	$('#message_submit').click(function(){
@@ -34,6 +34,11 @@ $(function(){
 		socket.emit('put_message', { message: message.val() });
 		message.val('');
 		message.focus();
+	});
+
+	socket.on('new_message', function (data) {
+		console.log('new_message');
+		$('#log').prepend("<div><strong>" + data.nickname + ":</strong> " + data.message + "</div>");
 	});
 
 });
