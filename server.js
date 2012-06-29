@@ -18,8 +18,13 @@ function handler (req, res) {
 }
 
 io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
+	socket.emit('init');
+	socket.on('login', function (data) {
+		socket.set('nickname', data.nickname, function() {
+			socket.emit('ready');
+		});  
+	});
+	socket.on('msg', function (data) {
+		socket.broadcast.emit('new_msg', data)
+	});
 });
