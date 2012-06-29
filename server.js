@@ -56,7 +56,7 @@ io.sockets.on('connection', function (socket) {
 			var users = [];
 			var clients = io.sockets.clients();
 			for (var i in clients) {
-				if (soc != socket) {
+				if (clients[i] != socket) {
 	        		users.push({nickname: clients[i].nickname});
 	        	}
 			}
