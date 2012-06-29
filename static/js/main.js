@@ -26,7 +26,7 @@ $(function(){
 
 	socket.on('lost_user', function (data) {
 		console.log('lost_user');
-		$('#log').prepend("<div class=\"system\">Some user " + /*data.nickname +*/ " leave the room :-(</div>");
+		$('#log').prepend("<div class=\"system\">User " + data.nickname + " leave the room :-(</div>");
 	});
 
 	$('#message_submit').click(function(){
