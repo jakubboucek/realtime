@@ -12,6 +12,11 @@ $(function(){
 		}
 	});
 
+	var resetMessageTime = function(){
+		var message_time_element = $('#message_time');
+		message_time_element.val(date2str(new Date()));
+	};
+
 	socket.on('init', function (data) {
 		console.log('init');
 		$('#login').attr('disabled', false); //for refresh
@@ -26,7 +31,7 @@ $(function(){
 			return false;
 		}
 
-		socket.emit('login', { nickname: nickname });
+		socket.emit('login', {nickname: nickname});
 	});
 
 	socket.on('ready', function (data) {
@@ -36,6 +41,7 @@ $(function(){
 		$('#login_submit').hide();
 		$('#messagebox').show();
 		$('#message').focus();
+		resetMessageTime();
 		$('#log').text("");
 	});
 
@@ -56,9 +62,14 @@ $(function(){
 			$('#message').focus();
 			return false;
 		}
-		socket.emit('put_message', { message: message.val() });
+		socket.emit('put_message', {message: message.val()});
 		message.val('');
 		message.focus();
+	});
+
+	$('#message_submit_later').click(function(){
+		var message_time = $('#message_time');
+		alert(str2date(message_time.val()));
 	});
 
 	socket.on('new_message', function (data) {
@@ -76,6 +87,7 @@ $(function(){
 		for(userid in users) {
 			var user = users[userid];
 			var nickname = user.nickname;
+			if('undefined' == typeof nickname) continue;
 			console.log(nickname);
 			var nickhash = hex_md5(nickname);
 			var image_url = "http://www.gravatar.com/avatar/" + nickhash + "?s=16&d=identicon";
@@ -83,7 +95,24 @@ $(function(){
 		}
 	});
 
-
-
 });
 
+function str2date(str) {
+	var reg = /(\d+)[.\/ ]\s*(\d+)[.\/ ]\s*(\d+)\s+(\d+)[.-: ](\d+)([.-: ](\d+))?/;
+	var strips = str.match(reg);
+	console.log(strips);
+	return new Date(strips[3],strips[2],strips[1],strips[4],strips[5], strips[7]);
+}
+
+function date2str(date) {
+	var d = date.getDate();
+    var m = date.getMonth()+1;
+    var y = date.getFullYear();
+    var datedate = ''+ d +'. '+ m +'. ' + y;
+
+	var h = date.getHours();
+    var i = date.getMinutes();
+    var s = date.getSeconds();
+	var datetime = '' + (h<=9?'0'+h:h) +':'+ (i<=9?'0'+i:i) +':'+ (s<=9?'0'+s:s);
+	return datedate + " " + datetime;
+}
