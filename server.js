@@ -29,13 +29,19 @@ function handler (req, res) {
 
 io.sockets.on('connection', function (socket) {
 	socket.emit('init');
+	
 	socket.on('login', function (data) {
 		socket.set('nickname', data.nickname, function() {
 			socket.emit('ready');
+			socket.broadcast.emit('new_user', {
+		    	nickname: data.nickname  
+			});
 		});  
 	});
+
 	socket.on('msg', function (data) {
 		data.nickname = socket.get('nickname');
+		data.createdTime = new Date.getTime();
 		socket.broadcast.emit('new_msg', data)
 	});
 });
