@@ -22,14 +22,16 @@ header, #page, footer {
 	float:left;
 }
 
-#userlist {
+#userlist,
+#messageslist {
 	width: 20%;
 	float: right;
 	margin-top: 1em;
 	font-size: 0.8em;
 }
 
-#userlist ul {
+#userlist ul,
+#messageslist ul {
 	list-style: none;
 	padding-left: 0;
 }

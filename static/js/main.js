@@ -133,10 +133,16 @@ $(function(){
 	});
 
 	socket.on('user_waiting_messages', function (data) {
-		console.log('users_list');
+		console.log('user_waiting_messages');
 		var messages = data.messages;
 
-		console.log(messages);
+		var messages_list_ul = $('<ul />');
+		$('#messageslist').html(messages_list_ul);
+
+		for(messageid in messages) {
+			var message = messages[messageid];
+			user_list_ul.append('<li> '+messageid + ': '  + message.publishTime + '</li>');
+		}
 	});
 
 });
