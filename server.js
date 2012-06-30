@@ -60,12 +60,23 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	socket.on('put_message', function (data) {
+		if (data.writingToken) {
+			sockets.broadcast.emit('delete_notify_writing', {
+				writingToken: data.writingToken
+			});
+		}
+
 		data.nickname = socket.nickname;
 		data.createdTime = new Date().getTime();
 		queue.add(socket.nickname, data.publishTime, data, function() {
 			socket.emit('user_waiting_messages', queue.getUserQueueData(socket.nickname));
 		});
 		
+	});
+
+
+	socket.on('notify_writing', function (data){
+		socket.broadcast.emit('notify_writing', data);
 	});
 
 
