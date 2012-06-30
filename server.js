@@ -61,7 +61,7 @@ io.sockets.on('connection', function (socket) {
 
 	socket.on('put_message', function (data) {
 		if (data.writingToken) {
-			sockets.broadcast.emit('delete_notify_writing', {
+			socket.broadcast.emit('delete_notify_writing', {
 				writingToken: data.writingToken
 			});
 		}
