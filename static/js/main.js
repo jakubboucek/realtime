@@ -155,7 +155,8 @@ $(function(){
 		resetMessageTime();
 	});
 
-	socket.on('new_message', function (data) {
+	socket.on('new_messages', function (data) {
+		console.log(data);
 		var messages = data.messages;
 		for(messageid in messages) {
 			var message = messages[messageid];
