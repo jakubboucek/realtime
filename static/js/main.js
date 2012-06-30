@@ -135,13 +135,15 @@ $(function(){
 	socket.on('user_waiting_messages', function (data) {
 		console.log('user_waiting_messages');
 		var messages = data.messages;
-
 		var messages_list_ul = $('<ul />');
 		$('#messageslist').html(messages_list_ul);
 
 		for(messageid in messages) {
 			var message = messages[messageid];
-			user_list_ul.append('<li> '+messageid + ': '  + message.publishTime + '</li>');
+			if('undefined' == typeof message.publishTime) {
+				continue;
+			}
+			messages_list_ul.append('<li>'  + timestamp2str(message.publishTime) + '</li>');
 		}
 	});
 
@@ -167,4 +169,12 @@ function date2str(date) {
     var s = date.getSeconds();
 	var datetime = '' + (h<=9?'0'+h:h) +':'+ (i<=9?'0'+i:i) +':'+ (s<=9?'0'+s:s);
 	return datedate + " " + datetime;
+}
+
+function timestamp2str(timestamp) {
+	return date2str(new Date(timestamp));
+}
+
+function str2timestamp(str) {
+	return str2date(str).getTime();
 }
