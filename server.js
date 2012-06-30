@@ -3,6 +3,8 @@ var app = require('http').createServer(handler)
   , io = require('socket.io').listen(app)
   , fs = require('fs')
   , queue = require('./lib/timeQueue.js')
+  , messageHistory = require('./lib/messageHistory.js')
+
 
 
 app.listen(8080);
@@ -30,7 +32,10 @@ function handler (req, res) {
 
 
 queue.on('pop', function(user, itemId, data){
-	io.sockets.emit('new_message', data);
+	io.sockets.emit('new_messages', {
+		messages: [data]
+	});
+	messageHistory.add(data);
 	queue.delete(user, itemId);
 	var clients = io.sockets.clients();
 	for (var i in clients) {
@@ -57,6 +62,10 @@ io.sockets.on('connection', function (socket) {
 		socket.broadcast.emit('new_user', {
 		    nickname: data.nickname  
 		});  
+
+		io.sockets.emit('new_messages', {
+			messages: messageHistory.getHistoryData()
+		});
 	});
 
 	socket.on('put_message', function (data) {
