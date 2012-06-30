@@ -81,6 +81,46 @@ $(function(){
 
 	$('#reset').click(resetMessageTime);
 
+	$('#message').keyup(function(){
+		var field = $(this);
+		var token = field.attr('data-writing-token');
+		var nickname = $('#login').val();
+		var prev_message = field.attr('data-previous-message');
+		var message = field.val();
+		if( ! token) {
+			token = hex_md5(nickname + "." + new Date().getTime());
+			field.attr('data-writing-token', token);
+			field.attr('data-previous-message', "");
+			prev_message = "";
+		}
+		if(message == prev_message) {
+			return;
+		}
+		field.attr('data-previous-message', message);
+		var data =  {
+			writingToken: token,
+			message: message
+		};
+		socket.emit('notify_writing', data);
+	});
+
+	socket.on('notify_writing', function (data) {
+		var edit_el = $('#' + data.writingToken);
+		if(edit_el.length == 0) {
+			edit_el = $('<div class="preview"><strong class="name">' + data.nickname + ':</strong> <span class="message"></span></div>');
+			edit_el.attr('id', data.writingToken);
+			$('#log').prepend(edit_el);
+		}
+		$('.message', edit_el).text(data.message);
+	});
+
+	socket.on('delete_notify_writing', function (data) {
+		var edit_el = $('#' + data.writingToken);
+		if(edit_el.length) {
+			edit_el.remove();
+		}
+	});
+
 	$('#message_submit,#message_submit_later').click(function(){
 		var now = $(this).attr('id') == 'message_submit';
 		console.log(now?"send message NOW":"send message DELAY");
@@ -101,17 +141,26 @@ $(function(){
 			}
 			data.publishTime = publishTime.getTime();
 		}
+		var token = message.attr('data-writing-token');
+		if(token) {
+			data.writingToken = token;
+		}
 		console.log(data);
 		socket.emit('put_message',data);
-		message.val('');
-		message.focus();
+		message
+			.removeAttr('data-writing-token')
+			.removeAttr('data-previous-message')
+			.val('')
+			.focus();
 		resetMessageTime();
 	});
 
 	socket.on('new_message', function (data) {
 		console.log('new_message');
 		console.log(data);
-		$('#log').prepend("<div><strong title=\""+ date2str(new Date(data.createdTime)) +"\">" + data.nickname + ":</strong> " + data.message + "</div>");
+		var chatLine = $('<div><strong class="name">' + data.nickname + ':</strong> <span class="time">('+ date2str(new Date(data.createdTime)) +')</span> <span class="message"></span></div>');
+		$('.message', chatLine).text( data.message );
+		$('#log').prepend(chatLine);
 	});
 
 	socket.on('user_list', function (data) {
