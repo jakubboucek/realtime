@@ -76,6 +76,7 @@ io.sockets.on('connection', function (socket) {
 
 
 	socket.on('notify_writing', function (data){
+		data.nickname = socket.nickname;
 		socket.broadcast.emit('notify_writing', data);
 	});
 
