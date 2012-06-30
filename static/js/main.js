@@ -55,21 +55,30 @@ $(function(){
 		$('#log').prepend("<div class=\"system\">User " + data.nickname + " leave the room :-(</div>");
 	});
 
-	$('#message_submit').click(function(){
+	$('#reset').click(resetMessageTime);
+
+	$('#message_submit,#message_submit_later').click(function(){
+		var now = $(this).attr('id') == 'message_submit';
 		var message = $('#message');
 		if(message.val() == "") {
 			alert("Please fill your message.");
 			$('#message').focus();
 			return false;
 		}
-		socket.emit('put_message', {message: message.val()});
+		var data =  {message: message.val()};
+		if(!now) {
+			var publishTime = str2date($('#message_time').val());
+			if(!isFinite(publishTime)) {
+				alert("Please fill valid time.");
+				$('#message_time').focus();
+				return false;
+
+			}
+			data.publishTime = publishTime.getTime();
+		}
+		socket.emit('put_message',data);
 		message.val('');
 		message.focus();
-	});
-
-	$('#message_submit_later').click(function(){
-		var message_time = $('#message_time');
-		alert(str2date(message_time.val()));
 	});
 
 	socket.on('new_message', function (data) {
