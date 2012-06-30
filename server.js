@@ -31,10 +31,10 @@ function handler (req, res) {
 
 queue.on('pop', function(data){
 	io.sockets.emit('new_message', data);
-	//var clients = io.sockets.clients();
-	//for (var i in clients) {
-    	//clients[i].emit('user_waiting_messages', queue.getUserQueueData(clients[i].nickname));
-	//}
+	var clients = io.sockets.clients();
+	for (var i in clients) {
+    	clients[i].emit('user_waiting_messages', queue.getUserQueueData(clients[i].nickname));
+	}
 });
 
 
@@ -64,6 +64,8 @@ io.sockets.on('connection', function (socket) {
 		});
 		
 	});
+
+
 
 	socket.on('disconnect', function () {
 		if (socket.nickname) {
