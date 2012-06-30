@@ -63,7 +63,7 @@ io.sockets.on('connection', function (socket) {
 		    nickname: data.nickname  
 		});  
 
-		io.sockets.emit('new_messages', {
+		socket.emit('new_messages', {
 			messages: messageHistory.getHistoryData()
 		});
 	});
