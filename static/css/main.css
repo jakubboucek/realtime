@@ -36,6 +36,13 @@ header, #page, footer {
 
 #userlist ul img {
 	vertical-align: middle;
+	width: 16px;
+	height: 16px;
+}
+
+#reset {
+	vertical-align: middle;
+	cursor: pointer;
 }
 
 #log .system {
