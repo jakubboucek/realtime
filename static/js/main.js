@@ -59,6 +59,7 @@ $(function(){
 
 	$('#message_submit,#message_submit_later').click(function(){
 		var now = $(this).attr('id') == 'message_submit';
+		console.log(now?"send message NOW":"send message DELAY");
 		var message = $('#message');
 		if(message.val() == "") {
 			alert("Please fill your message.");
@@ -76,6 +77,7 @@ $(function(){
 			}
 			data.publishTime = publishTime.getTime();
 		}
+		console.log(data);
 		socket.emit('put_message',data);
 		message.val('');
 		message.focus();
@@ -83,7 +85,8 @@ $(function(){
 
 	socket.on('new_message', function (data) {
 		console.log('new_message');
-		$('#log').prepend("<div><strong>" + data.nickname + ":</strong> " + data.message + "</div>");
+		console.log(data);
+		$('#log').prepend("<div><strong title=\""+ date2str(new Date(data.createdTime)) +"\">" + data.nickname + ":</strong> " + data.message + "</div>");
 	});
 
 	socket.on('user_list', function (data) {
