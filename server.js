@@ -2,6 +2,8 @@ var app = require('http').createServer(handler)
   , url = require('url')
   , io = require('socket.io').listen(app)
   , fs = require('fs')
+  , queue = require('./lib/timeQueue.js')
+
 
 app.listen(8080);
 
@@ -27,9 +29,18 @@ function handler (req, res) {
 }
 
 
+queue.on('pop', function(data){
+	io.sockets.emit('new_message', data);
+	//var clients = io.sockets.clients();
+	//for (var i in clients) {
+    	//clients[i].emit('user_waiting_messages', queue.getUserQueueData(clients[i].nickname));
+	//}
+});
+
+
 io.sockets.on('connection', function (socket) {
 	socket.emit('init');
-	
+	socket.emit('user_waiting_messages', queue.getUserQueueData(socket.nickname));
 	socket.on('login', function (data) {
 		socket.nickname = data.nickname;
 		socket.emit('ready');
@@ -48,7 +59,10 @@ io.sockets.on('connection', function (socket) {
 	socket.on('put_message', function (data) {
 		data.nickname = socket.nickname;
 		data.createdTime = new Date().getTime();
-		io.sockets.emit('new_message', data);
+		queue.add(socket.nickname, data.publishTime, data, function() {
+			socket.emit('user_waiting_messages', queue.getUserQueueData(socket.nickname));
+		});
+		
 	});
 
 	socket.on('disconnect', function () {
