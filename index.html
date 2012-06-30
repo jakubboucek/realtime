@@ -17,7 +17,15 @@
 	<div id="messagebox">
 		<label for="message">Insert message and press Enter</label>
 		<input type="text" id="message" size="50" autocomplete="off" placeholder="Message" data-onenter="message_submit" /> <button id="message_submit">Submit now</button><br />
-		<input type="text" id="message_time" size="20" autocomplete="off" placeholder="loading..." data-onenter="message_submit_later" /> <img src="/static/img/reset.png" id="reset"/> <button id="message_submit_later">Submit later...</button>
+		<input type="text" id="message_time" size="20" autocomplete="off" placeholder="loading..." data-onenter="message_submit_later" /> <img src="/static/img/reset.png" id="reset"/> <button id="message_submit_later">Submit later...</button><br />
+		<a href="#" class="message_time_increment" data-increment-value="5"> + 5s</a>
+		<a href="#" class="message_time_increment" data-increment-value="10"> + 10s</a>
+		<a href="#" class="message_time_increment" data-increment-value="30"> + 30s</a>
+		<a href="#" class="message_time_increment" data-increment-value="60"> + 1m</a>
+		<a href="#" class="message_time_increment" data-increment-value="120"> + 2m</a>
+		<a href="#" class="message_time_increment" data-increment-value="300"> + 5m</a>
+		<a href="#" class="message_time_increment" data-increment-value="600"> + 10m</a>
+		<a href="#" class="message_time_increment" data-increment-value="3600"> + 1h</a>
 		<div id="log">loading...</div>
 		<div id="userlist">loading...</div>
 		<div class="cleaner"></div>

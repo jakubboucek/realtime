@@ -17,6 +17,30 @@ $(function(){
 		message_time_element.val(date2str(new Date()));
 	};
 
+	$('.message_time_increment').click(function(e){
+		e.preventDefault();
+		var $link = $(this);
+		var increment_value = parseInt($link.attr('data-increment-value'));
+		if(increment_value == 0) {
+			return false;
+		}
+		var message_time_element = $('#message_time');
+		var current_time = str2date(message_time_element.val());
+		if(!current_time) {
+			current_time = new Date();
+		}
+		if(current_time < new Date()) {
+			current_time = new Date();
+		}
+		//Date to timestamp
+		current_time = current_time.getTime();
+
+		current_time += increment_value * 1000;
+
+
+		message_time_element.val(date2str(new Date(current_time)));
+	});
+
 	socket.on('init', function (data) {
 		console.log('init');
 		$('#login').attr('disabled', false); //for refresh
@@ -120,7 +144,9 @@ function str2date(str) {
 	var reg = /(\d+)[.\/ ]\s*(\d+)[.\/ ]\s*(\d+)\s+(\d+)[.-: ](\d+)([.-: ](\d+))?/;
 	var strips = str.match(reg);
 	console.log(strips);
-	return new Date(strips[3],strips[2],strips[1],strips[4],strips[5], strips[7]);
+	if(!strips)
+		return null;
+	return new Date(strips[3],strips[2]-1,strips[1],strips[4],strips[5], strips[7]);
 }
 
 function date2str(date) {
