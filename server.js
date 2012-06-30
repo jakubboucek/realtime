@@ -29,11 +29,14 @@ function handler (req, res) {
 }
 
 
-queue.on('pop', function(data){
+queue.on('pop', function(user, itemId, data){
 	io.sockets.emit('new_message', data);
+	queue.delete(user, itemId);
 	var clients = io.sockets.clients();
 	for (var i in clients) {
-    	clients[i].emit('user_waiting_messages', queue.getUserQueueData(clients[i].nickname));
+		if (clients[i].nickname == user) {
+    		clients[i].emit('user_waiting_messages', queue.getUserQueueData(clients[i].nickname));
+		}
 	}
 });
 
