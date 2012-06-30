@@ -105,6 +105,7 @@ $(function(){
 		socket.emit('put_message',data);
 		message.val('');
 		message.focus();
+		resetMessageTime();
 	});
 
 	socket.on('new_message', function (data) {
