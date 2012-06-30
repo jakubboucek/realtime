@@ -159,8 +159,8 @@ $(function(){
 		var messages = data.messages;
 		for(messageid in messages) {
 			var message = messages[messageid];
-			var chatLine = $('<div><strong class="name">' + data.nickname + ':</strong> <span class="time">('+ date2str(new Date(data.createdTime)) +')</span> <span class="message"></span></div>');
-			$('.message', chatLine).text( data.message );
+			var chatLine = $('<div><strong class="name">' + message.nickname + ':</strong> <span class="time">('+ date2str(new Date(message.createdTime)) +')</span> <span class="message"></span></div>');
+			$('.message', chatLine).text( message.message );
 			$('#log').prepend(chatLine);
 		}
 	});
