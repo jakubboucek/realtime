@@ -1,6 +1,7 @@
 body {
 	font-family: arial, helvetica;
 	background-color: #ddd;
+	background: #ddd url(/static/img/logo.png) center top no-repeat;
 }
 
 header, #page, footer {
